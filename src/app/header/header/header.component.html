@@ -6,5 +6,14 @@
       Calculate when to apply for Canadian citizenship with us
     </p>
   </a>
+  <ul class='nav nav-pills'>
+    <li><a class='nav-link' routerLinkActive='active' [routerLink]="['/welcome']">How to use</a></li>
+    <li><a class='nav-link' routerLinkActive='active' [routerLink]="['/calculate-date']">Calculate The Date</a></li>
+  </ul>
 </nav>
+
+
+<div class='container'>
+  <router-outlet></router-outlet>
+</div>
 
