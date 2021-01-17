@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import * as moment from 'moment';
+import {ActivatedRouteSnapshot, Router} from '@angular/router';
 
 @Component({
   selector: 'app-landing-date-stage',
@@ -9,18 +10,22 @@ import * as moment from 'moment';
 export class LandingDateStageComponent implements OnInit {
   landingDate: moment.Moment;
 
-  constructor() {
+  constructor(private router: Router) {
   }
 
   ngOnInit(): void {
   }
 
   public handlePickedDate(date: moment.Moment): void {
-    this.landingDate = date;
+    this.landingDate = date.utc(true);
   }
 
   calculateResidencyTime(): number {
-    const landDate = moment(this.landingDate);
-    return moment().diff(landDate, 'days');
+    return moment().diff(this.landingDate, 'days');
+  }
+
+  redirectToTripsStage(): void {
+    alert(this.landingDate.format());
+    this.router.navigate(['/enter-trips-info'], {state: {data: {landingDate: this.landingDate.format()}}});
   }
 }
