@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-landing-date-stage',
@@ -6,6 +7,7 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./landing-date-stage.component.css']
 })
 export class LandingDateStageComponent implements OnInit {
+  landingDate: moment.Moment;
 
   constructor() {
   }
@@ -13,8 +15,12 @@ export class LandingDateStageComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public handlePickedDate(date: Date): void {
-    console.log('Picked date: ', date);
+  public handlePickedDate(date: moment.Moment): void {
+    this.landingDate = date;
   }
 
+  calculateResidencyTime(): number {
+    const landDate = moment(this.landingDate);
+    return moment().diff(landDate, 'days');
+  }
 }

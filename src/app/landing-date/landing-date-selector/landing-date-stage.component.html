@@ -1,4 +1,17 @@
-<div>
+<div class="card-body">
+  <h1 class="card-title">Step 1: Landing date</h1>
+  <div class="card-text">
+    Please provide the exact date of landing in Canada with a Permanent residency
+    or the date when you were granted a Permanent Resident card.
+  </div>
+  <br/>
+  <div class="container align-content-md-center" style="width: 50%">
+    <app-date-selector (onDatePicked)="handlePickedDate($event)"></app-date-selector>
+  </div>
+</div>
 
-  <app-date-selector (onDatePicked)="handlePickedDate($event)"></app-date-selector>
+<div class="card-body" *ngIf="landingDate">
+  So far you have lived in Canada for about {{calculateResidencyTime()}} days.
+  <br>
+  Based on the current regulations, an applicant must live in Canada for 1,095 days.
 </div>

@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-date-selector',
@@ -7,14 +8,15 @@ import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./date-selector.component.css']
 })
 export class DateSelectorComponent {
-  private model: NgbDateStruct;
-  @Output() onDatePicked: EventEmitter<Date> = new EventEmitter<Date>();
+  model: NgbDateStruct;
+  @Output() onDatePicked: EventEmitter<moment.Moment> = new EventEmitter<moment.Moment>();
 
   /**
    * Handling the date selection. Event is emitted and should be handled by the parent component if interested
    */
   public onDateSelected(): void {
-    const pickedDate = new Date(this.model.year, this.model.month, this.model.day);
+    // The month index starts from 0 :(
+    const pickedDate = moment.utc([this.model.year, this.model.month - 1, this.model.day]);
     this.onDatePicked.emit(pickedDate);
   }
 }
