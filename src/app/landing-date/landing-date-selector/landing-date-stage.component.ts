@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import * as moment from 'moment';
-import {ActivatedRouteSnapshot, Router} from '@angular/router';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-landing-date-stage',
