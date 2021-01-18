@@ -5,6 +5,7 @@ import {HeaderComponent} from './header/header/header.component';
 import {SharedModule} from './shared/shared.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {HttpClientModule} from '@angular/common/http';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [],
@@ -13,7 +14,8 @@ import {HttpClientModule} from '@angular/common/http';
     HeaderModule,
     SharedModule,
     NgbModule,
-    HttpClientModule
+    HttpClientModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [HeaderComponent]
