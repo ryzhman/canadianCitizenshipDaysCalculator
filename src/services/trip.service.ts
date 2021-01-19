@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
-import {Trip} from '../models/Trip';
+import {Trip} from '../models/trip';
 import {catchError, map, tap} from 'rxjs/operators';
 
 @Injectable({
@@ -44,5 +44,15 @@ export class TripService {
     }
     console.error(errorMessage);
     return throwError(errorMessage);
+  }
+
+  addTrip(newTrip: Trip): void {
+    this.http.post<Trip>(this.productUrl, newTrip)
+      .pipe(
+        tap(data => {
+          console.log('trip was posted: ' + JSON.stringify(data));
+        }),
+        catchError(this.handleError)
+      );
   }
 }

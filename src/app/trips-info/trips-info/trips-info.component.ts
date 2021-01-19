@@ -5,7 +5,6 @@ import {Router} from '@angular/router';
 import {TripService} from '../../../services/trip.service';
 import {Trip} from '../../../models/trip';
 import {SortableHeaderDirective, SortEvent} from '../sortable-header.directive';
-import {log} from 'util';
 
 const compare = (v1: string | number | Date, v2: string | number | Date) => v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
 
