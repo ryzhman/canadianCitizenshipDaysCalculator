@@ -29,6 +29,7 @@ export class TripsInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    alert('Component is reloaded');
     this.tripService.getTrips().subscribe({
       next:
         trips => {
@@ -56,6 +57,12 @@ export class TripsInfoComponent implements OnInit {
         const res = compare(a[column], b[column]);
         return direction === 'asc' ? res : -res;
       });
+    }
+  }
+
+  refreshComponent(isRefreshRequired: boolean): void {
+    if (isRefreshRequired) {
+      this.ngOnInit();
     }
   }
 }

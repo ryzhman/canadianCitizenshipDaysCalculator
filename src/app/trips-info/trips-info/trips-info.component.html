@@ -31,6 +31,6 @@
   </div>
 
   <div class="align-self-center">
-    <app-new-trip></app-new-trip>
+    <app-new-trip (onTripAdded)="refreshComponent($event)"></app-new-trip>
   </div>
 </div>
