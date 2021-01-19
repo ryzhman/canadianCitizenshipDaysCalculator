@@ -6,18 +6,17 @@ import {RouterModule} from '@angular/router';
 import {AboutComponent} from '../about/about/about.component';
 import {LandingDateStageComponent} from '../landing-date/landing-date-selector/landing-date-stage.component';
 import {TripsInfoComponent} from '../trips-info/trips-info/trips-info.component';
-import {SortableHeaderDirective} from '../trips-info/sortable-header.directive';
+import {TripsInfoModule} from '../trips-info/trips-info.module';
 
 @NgModule({
   declarations: [
-    HeaderComponent,
-    TripsInfoComponent,
-    SortableHeaderDirective
+    HeaderComponent
   ],
   imports: [
     CommonModule,
     LandingDateModule,
     RouterModule,
+    TripsInfoModule,
     RouterModule.forRoot([
       {path: 'about', component: AboutComponent},
       {path: 'calculate-date', component: LandingDateStageComponent},
