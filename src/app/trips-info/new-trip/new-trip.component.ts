@@ -1,9 +1,11 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Moment} from 'moment';
 import * as moment from 'moment';
+import {Moment} from 'moment';
 import {Trip} from '../../../models/trip';
 import {TripService} from '../../../services/trip.service';
+import {CountryService} from '../../../services/country/country.service';
+import {Country} from '../../../models/country';
 
 @Component({
   selector: 'app-new-trip',
@@ -21,7 +23,7 @@ export class NewTripComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  constructor(private modalService: NgbModal, private tripService: TripService) {
+  constructor(private modalService: NgbModal, private tripService: TripService, private countryService: CountryService) {
   }
 
   openNewTripModal(content): void {
@@ -32,8 +34,13 @@ export class NewTripComponent implements OnInit {
    * Posts new trip to the server and triggers the reload of the parent component
    */
   saveTrip(): void {
+    let country: Country = this.countryService.getByName(this.newCountryName);
+    if (!country) {
+      country = new Country();
+      country.name = this.newCountryName;
+    }
     // debugger;
-    const newTrip = new Trip(this.newCountryName, this.newDepartureDate.toDate(), this.newArrivalDate.toDate(), this.newTripNotes);
+    const newTrip = new Trip(country, this.newDepartureDate.toDate(), this.newArrivalDate.toDate(), this.newTripNotes);
     this.tripService.addTrip(newTrip);
     this.onTripAdded.emit(true);
   }

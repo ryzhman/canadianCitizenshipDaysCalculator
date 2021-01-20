@@ -1,18 +1,24 @@
 [
   {
-    "country": "US",
+    "country": {
+      "name": "United States"
+    },
     "departureDate": "01/10/2020",
     "arrivalDate": "01/20/2020",
     "notes": "Business trip"
   },
   {
-    "country": "Dominican Republic",
+    "country": {
+      "name": "Dominican Republic"
+    },
     "departureDate": "12/26/2020",
     "arrivalDate": "01/03/2021",
     "notes": "Leisure trip"
   },
   {
-    "country": "Ukraine",
+    "country": {
+      "name": "Ukraine"
+    },
     "departureDate": "06/22/2019",
     "arrivalDate": "08/10/2019",
     "notes": "Visiting parents"

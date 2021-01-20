@@ -17,10 +17,10 @@
 
       <tbody>
       <tr *ngFor="let trip of trips; let i = index">
-        <th scope="row">{{i}}</th>
+        <th scope="row">{{i + 1}}</th>
         <td>
-          <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + i" class="mr-2" style="width: 20px">
-          {{ trip.country }}
+          <img *ngIf="trip.country.fileUrl" [src]="'https://' + trip.country.fileUrl" class="mr-2" style="width: 20px">
+          {{ trip.country.name}}
         </td>
         <td>{{ trip.departureDate | date : 'mediumDate'}}</td>
         <td>{{ trip.arrivalDate | date  : 'mediumDate'}}</td>

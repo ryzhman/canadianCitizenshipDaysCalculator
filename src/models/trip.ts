@@ -1,16 +1,16 @@
+import {Country} from './country';
+
 export class Trip {
   id?: number;
-  country: string;
+  country: Country;
   departureDate: Date;
   arrivalDate: Date;
   notes: string;
-  private flagUrl: string;
 
-  constructor(country: string, departureDate: Date, arrivalDate: Date, notes: string, flagUrl: string) {
+  constructor(country: Country, departureDate: Date, arrivalDate: Date, notes: string) {
     this.country = country;
     this.departureDate = departureDate;
     this.arrivalDate = arrivalDate;
     this.notes = notes;
-    this.flagUrl = flagUrl;
   }
 }

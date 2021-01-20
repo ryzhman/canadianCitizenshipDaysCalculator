@@ -5,8 +5,10 @@ import {Router} from '@angular/router';
 import {TripService} from '../../../services/trip.service';
 import {Trip} from '../../../models/trip';
 import {SortableHeaderDirective, SortEvent} from '../sortable-header.directive';
+import {Country} from '../../../models/country';
+import {CountryService} from '../../../services/country/country.service';
 
-const compare = (v1: string | number | Date, v2: string | number | Date) => v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
+const compare = (v1: string | number | Date | Country, v2: string | number | Date | Country) => v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
 
 
 @Component({
@@ -19,7 +21,7 @@ export class TripsInfoComponent implements OnInit {
   trips: Trip[];
   @ViewChildren(SortableHeaderDirective) headers: QueryList<SortableHeaderDirective>;
 
-  constructor(private router: Router, private tripService: TripService) {
+  constructor(private router: Router, private tripService: TripService, private countryService: CountryService) {
     if (router.getCurrentNavigation().extras.state
       && router.getCurrentNavigation().extras.state.data
       && router.getCurrentNavigation().extras.state.data.landingDate) {
@@ -29,11 +31,15 @@ export class TripsInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    alert('Component is reloaded');
+    // alert('Component is reloaded');
     this.tripService.getTrips().subscribe({
       next:
         trips => {
           this.trips = trips;
+          // find and populate countries based on provided data source
+          this.trips.forEach(trip => {
+            trip.country = this.countryService.getByName(trip.country.name);
+          });
           console.log('Trips loaded in trip info');
         }
     });
