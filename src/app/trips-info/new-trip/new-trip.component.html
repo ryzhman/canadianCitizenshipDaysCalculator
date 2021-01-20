@@ -9,8 +9,22 @@
   <div class="modal-body">
     <div>
       <div class="form-group">
-        <label for="countryName" class="label-default">Email address</label>
-        <input type="text" class="form-control form-control-lg" [(ngModel)]='newCountryName' id="countryName" placeholder="Canada">
+<!--        TODO refactor into a separate component-->
+        <label for="typeahead-focus">Enter country</label>
+        <input
+          id="typeahead-focus"
+          type="text"
+          class="form-control form-control-lg"
+          [(ngModel)]="model"
+          [ngbTypeahead]="search"
+          (focus)="focus$.next($any($event).target.value)"
+          (click)="click$.next($any($event).target.value)"
+          #instance="ngbTypeahead"
+          [resultFormatter]="formatter"
+        />
+<!--        <app-searchable-input [dataProvider]="countryService.getAll()" [searchByField]="'name'"-->
+<!--                              [(ngModel)]='newCountryName'-->
+<!--                              [id]="'countryName'" [labelText]="'Enter country'"></app-searchable-input>-->
       </div>
     </div>
     <div>

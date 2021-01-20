@@ -1,0 +1,10 @@
+<label for="model">{{labelText}}</label>
+<input
+  id="model"
+  type="text"
+  class="form-control form-control-lg"
+  [ngbTypeahead]="search"
+  (focus)="focus$.next($any($event).target.value)"
+  (click)="click$.next($any($event).target.value)"
+  #instance="ngbTypeahead"
+/>
