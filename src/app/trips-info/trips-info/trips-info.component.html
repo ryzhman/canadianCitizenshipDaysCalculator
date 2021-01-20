@@ -20,7 +20,6 @@
         <th scope="row">{{i + 1}}</th>
         <td>
           <div *ngIf="trip.country && trip.country.name">
-            {{trip | json}}
             <img *ngIf="trip.country.fileUrl" [src]="'https://' + trip.country.fileUrl" class="mr-2"
                  style="width: 20px">
             {{ trip.country.name}}

@@ -15,13 +15,19 @@
           id="typeahead-focus"
           type="text"
           class="form-control form-control-lg"
-          [(ngModel)]="model"
+          [(ngModel)]="selectedCountry"
           [ngbTypeahead]="search"
-          (focus)="focus$.next($any($event).target.value)"
-          (click)="click$.next($any($event).target.value)"
-          #instance="ngbTypeahead"
+          [inputFormatter]="formatter"
           [resultFormatter]="formatter"
+          [editable]='false'
+          [required]="true"
+          [resultTemplate]="rt"
         />
+
+        <ng-template #rt let-r="result" let-t="term">
+          <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+          <p>{{r['alpha3']}}</p>
+        </ng-template>
 <!--        <app-searchable-input [dataProvider]="countryService.getAll()" [searchByField]="'name'"-->
 <!--                              [(ngModel)]='newCountryName'-->
 <!--                              [id]="'countryName'" [labelText]="'Enter country'"></app-searchable-input>-->

@@ -22,7 +22,7 @@ export class NewTripComponent implements OnInit {
   newTripNotes: string;
   @Output() onTripAdded: EventEmitter<boolean> = new EventEmitter<boolean>();
   // TODO refactor into a separate component
-  model: string;
+  selectedCountry: Country;
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
@@ -31,18 +31,15 @@ export class NewTripComponent implements OnInit {
   // @Input() placeholderText: string;
   // @Input() labelText: string;
 
-  search = (text$: Observable<string>) => {
-    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
-    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
-    const inputFocus$ = this.focus$;
-
-    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+  search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      filter(term => term.length >= 2),
       map(term => (term === '' ? this.countryService.getAll()
         : this.countryService.getAll().filter(item => item.name.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
-    );
-  }
+    )
   formatter = (result: Country) => result.name;
-
 
   ngOnInit(): void {
   }
@@ -58,7 +55,7 @@ export class NewTripComponent implements OnInit {
    * Posts new trip to the server and triggers the reload of the parent component
    */
   saveTrip(): void {
-    let country: Country = this.countryService.getByName(this.newCountryName);
+    let country: Country = this.countryService.getByName(this.selectedCountry.name);
     if (!country) {
       country = new Country();
       country.name = this.newCountryName;
