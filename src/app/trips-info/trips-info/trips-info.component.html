@@ -19,8 +19,12 @@
       <tr *ngFor="let trip of trips; let i = index">
         <th scope="row">{{i + 1}}</th>
         <td>
-          <img *ngIf="trip.country.fileUrl" [src]="'https://' + trip.country.fileUrl" class="mr-2" style="width: 20px">
-          {{ trip.country.name}}
+          <div *ngIf="trip.country && trip.country.name">
+            {{trip | json}}
+            <img *ngIf="trip.country.fileUrl" [src]="'https://' + trip.country.fileUrl" class="mr-2"
+                 style="width: 20px">
+            {{ trip.country.name}}
+          </div>
         </td>
         <td>{{ trip.departureDate | date : 'mediumDate'}}</td>
         <td>{{ trip.arrivalDate | date  : 'mediumDate'}}</td>

@@ -40,11 +40,8 @@ export class TripsInfoComponent implements OnInit {
           this.trips.forEach(trip => {
             trip.country = this.countryService.getByName(trip.country.name);
           });
-          console.log('Trips loaded in trip info');
         }
     });
-    console.log('Trip info onInit loaded');
-
   }
 
   onSort({column, direction}: SortEvent): void {

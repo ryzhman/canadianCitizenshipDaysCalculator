@@ -3,12 +3,14 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {Trip} from '../models/trip';
 import {catchError, map, tap} from 'rxjs/operators';
+import {jsGlobalObjectValue} from '@angular/compiler-cli/src/ngtsc/partial_evaluator/src/known_declaration';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TripService {
   private productUrl = 'api/trips.json';
+  private addedTrips: Trip[] = [];
 
   constructor(private http: HttpClient) {
   }
@@ -16,8 +18,8 @@ export class TripService {
   getTrips(): Observable<Trip[]> {
     return this.http.get<Trip[]>(this.productUrl)
       .pipe(
-        tap(data => {
-          console.log('All: ' + JSON.stringify(data));
+        map(data => {
+          return data.concat(this.addedTrips);
         }),
         catchError(this.handleError)
       );
@@ -47,6 +49,8 @@ export class TripService {
   }
 
   addTrip(newTrip: Trip): void {
+    this.addedTrips.push(newTrip);
+    // doing nothing so far
     this.http.post<Trip>(this.productUrl, newTrip)
       .pipe(
         tap(data => {
