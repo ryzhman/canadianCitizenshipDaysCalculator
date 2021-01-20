@@ -7,30 +7,31 @@
   </div>
 
   <div class="modal-body">
-    <div class="modal-content">
-      <div>
-        <div>Enter the destination country</div>
-        <div>
-          <input type="text" [(ngModel)]='newCountryName'>
-        </div>
+    <div>
+      <div class="form-group">
+        <label for="countryName" class="label-default">Email address</label>
+        <input type="text" class="form-control form-control-lg" [(ngModel)]='newCountryName' id="countryName" placeholder="Canada">
       </div>
-      <div>
-        <div>Enter the date of departure from Canada</div>
-        <div>
-          <app-date-selector (onDatePicked)="handleSelectedDepartureDate($event)"></app-date-selector>
-        </div>
+    </div>
+    <div>
+      <div class="form-group">
+        <label for="departureDate" class="label-default">Enter the date of departure from Canada</label>
+        <app-date-selector [fieldId]="'departureDate'"
+                           (onDatePicked)="handleSelectedDepartureDate($event)"></app-date-selector>
       </div>
-      <div>
-        <div>Enter the date of arrival to Canada</div>
-        <div>
-          <app-date-selector (onDatePicked)="handleSelectedArrivalDate($event)"></app-date-selector>
-        </div>
+    </div>
+    <div>
+      <div class="form-group">
+        <label for="arrivalDate" class="label-default">Enter the date of arrival to Canada</label>
+        <app-date-selector [fieldId]="'arrivalDate'"
+                           (onDatePicked)="handleSelectedArrivalDate($event)"></app-date-selector>
       </div>
-      <div>
-        <div>Enter the trip notes</div>
-        <div>
-          <input type="text" [(ngModel)]="newTripNotes">
-        </div>
+    </div>
+    <div>
+      <div class="form-group">
+        <label for="notes" class="label-default">Enter the trip notes</label>
+        <input type="text" class="form-control form-control-lg" id="notes" [(ngModel)]="newTripNotes"
+               placeholder="Anything that can help you recall the trip later">
       </div>
     </div>
   </div>
@@ -41,4 +42,4 @@
   </div>
 </ng-template>
 
-<button class="btn btn-outline-primary mb-2 mr-2" (click)="openLg(content)">Large modal</button>
+<button class="btn btn-outline-primary mb-2 mr-2" (click)="openNewTripModal(content)">Large modal</button>

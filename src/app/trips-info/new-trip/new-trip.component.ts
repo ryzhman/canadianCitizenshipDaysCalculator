@@ -24,7 +24,7 @@ export class NewTripComponent implements OnInit {
   constructor(private modalService: NgbModal, private tripService: TripService) {
   }
 
-  openLg(content): void {
+  openNewTripModal(content): void {
     this.modalService.open(content, {size: 'lg'});
   }
 
@@ -32,6 +32,7 @@ export class NewTripComponent implements OnInit {
    * Posts new trip to the server and triggers the reload of the parent component
    */
   saveTrip(): void {
+    // debugger;
     const newTrip = new Trip(this.newCountryName, this.newDepartureDate.toDate(), this.newArrivalDate.toDate(), this.newTripNotes);
     this.tripService.addTrip(newTrip);
     this.onTripAdded.emit(true);
