@@ -14,7 +14,7 @@ import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
   templateUrl: './new-trip.component.html',
   styleUrls: ['./new-trip.component.css']
 })
-export class NewTripComponent implements OnInit {
+export class NewTripComponent {
   closeResult: string;
   newCountryName: string;
   newDepartureDate: Moment;
@@ -26,10 +26,6 @@ export class NewTripComponent implements OnInit {
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
-  // @Input() dataProvider: Array<any>;
-  // @Input() searchByField: string;
-  // @Input() placeholderText: string;
-  // @Input() labelText: string;
 
   search = (text$: Observable<string>) =>
     text$.pipe(
