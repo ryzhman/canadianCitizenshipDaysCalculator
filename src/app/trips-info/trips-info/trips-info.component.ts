@@ -68,5 +68,16 @@ export class TripsInfoComponent implements OnInit {
       this.ngOnInit();
     }
   }
+
+  redirectToCalculationStage(): void {
+    this.router.navigate(['/calculate-app-date'], {
+      state: {
+        data: {
+          landingDate: this.landingDate.format(),
+          trips: this.trips
+        }
+      }
+    });
+  }
 }
 

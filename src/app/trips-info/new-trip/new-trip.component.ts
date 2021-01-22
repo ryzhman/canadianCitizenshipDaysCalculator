@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {NgbModal, NgbTypeahead} from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import {Moment} from 'moment';
@@ -6,7 +6,7 @@ import {Trip} from '../../../models/trip';
 import {TripService} from '../../../services/trip.service';
 import {CountryService} from '../../../services/country/country.service';
 import {Country} from '../../../models/country';
-import {merge, Observable, Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 
 @Component({
@@ -36,9 +36,6 @@ export class NewTripComponent {
         : this.countryService.getAll().filter(item => item.name.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
     )
   formatter = (result: Country) => result.name;
-
-  ngOnInit(): void {
-  }
 
   constructor(private modalService: NgbModal, private tripService: TripService, private countryService: CountryService) {
   }
