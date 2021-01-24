@@ -29,6 +29,7 @@
     "bootstrap": "^4.5.3",
     "font-awesome": "^4.7.0",
     "moment": "^2.29.1",
+    "ng-bootstrap-form-validation": "^9.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
     "zone.js": "~0.10.2"
