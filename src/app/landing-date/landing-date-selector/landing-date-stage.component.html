@@ -11,6 +11,8 @@
       <app-date-selector
         [formControlTitle]="'landingDate'"
         [parentForm]="formGroup"
+        [formWarning]="'futureDateWarning'"
+        [validationWarningMessage]="'Landing date you entered is in the future'"
       ></app-date-selector>
     </div>
     <div class="modal-footer">

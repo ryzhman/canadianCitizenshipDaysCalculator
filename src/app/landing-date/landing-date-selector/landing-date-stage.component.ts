@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as moment from 'moment';
 import {Router} from '@angular/router';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-landing-date-stage',
@@ -16,19 +16,10 @@ export class LandingDateStageComponent implements OnInit {
   constructor(private router: Router, private formBuilder: FormBuilder) {
   }
 
-  forbiddenNameValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const forbidden = false;
-      return null;
-      // forbidden ? {forbiddenName: {value: control.value}} : null;
-    };
-  }
-
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
       landingDate: new FormControl('', [
-        Validators.required,
-        this.forbiddenNameValidator()
+        Validators.required
       ])
     });
     // this.formGroup.valueChanges.subscribe(newVal => console.log(newVal));

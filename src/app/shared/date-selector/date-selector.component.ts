@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {AbstractControl, FormGroup} from '@angular/forms';
 
 /**
  * This component generates the HTML element for input.
@@ -17,8 +17,15 @@ export class DateSelectorComponent {
    */
   @Input() parentForm: FormGroup;
   @Input() formControlTitle: string;
+  @Input() formError: string;
+  @Input() formWarning: string;
+  @Input() validationWarningMessage: string;
 
   get formModel(): any {
     return this.parentForm.get(this.formControlTitle) || null;
+  }
+
+  get formControl(): AbstractControl {
+    return this.parentForm.controls[this.formControlTitle] as AbstractControl;
   }
 }

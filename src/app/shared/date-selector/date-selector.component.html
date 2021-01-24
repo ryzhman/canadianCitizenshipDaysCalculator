@@ -12,5 +12,11 @@
               (click)="d.toggle()"
               type="button"></button>
     </div>
+    <span class="invalid-feedback" *ngIf="formControl.errors">
+      {{validationWarningMessage}}
+    </span>
+    <!--    <span class="invalid-feedback" *ngIf="formControl.warnings && formControl.warnings[formWarning]">-->
+    <!--      {{validationWarningMessage}}-->
+    <!--   </span>-->
   </div>
 </div>
