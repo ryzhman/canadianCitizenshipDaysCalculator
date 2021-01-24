@@ -18,8 +18,8 @@ export class DateSelectorComponent {
   @Input() parentForm: FormGroup;
   @Input() formControlTitle: string;
   @Input() formError: string;
-  @Input() formWarning: string;
-  @Input() validationWarningMessage: string;
+  // @Input() formWarning: string;
+  // @Input() validationWarningMessage: string;
 
   get formModel(): any {
     return this.parentForm.get(this.formControlTitle) || null;

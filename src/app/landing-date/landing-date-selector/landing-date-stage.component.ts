@@ -12,6 +12,7 @@ export class LandingDateStageComponent implements OnInit {
   landingDate: moment.Moment;
   formGroup: FormGroup;
   landingDateValidator: FormControl;
+  private isValidDate = true;
 
   constructor(private router: Router, private formBuilder: FormBuilder) {
   }
@@ -28,12 +29,14 @@ export class LandingDateStageComponent implements OnInit {
   }
 
   onDateSelected(): void {
-    if (this.formGroup && this.formGroup.controls.landingDate) {
+    if (this.formGroup.controls.landingDate.status === 'VALID') {
       // The month index starts from 0 :(
       const pickedDate = moment.utc([this.formGroup.controls.landingDate.value.year,
         this.formGroup.controls.landingDate.value.month - 1,
         this.formGroup.controls.landingDate.value.day]);
       this.landingDate = pickedDate;
+    } else {
+      this.isValidDate = false;
     }
   }
 
