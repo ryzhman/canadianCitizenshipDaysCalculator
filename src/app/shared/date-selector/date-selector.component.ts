@@ -1,22 +1,24 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment';
+import {Component, Input} from '@angular/core';
+import {FormGroup} from '@angular/forms';
 
+/**
+ * This component generates the HTML element for input.
+ * The validation logic is created in parent form and passed in as property of parentForm
+ */
 @Component({
   selector: 'app-date-selector',
   templateUrl: './date-selector.component.html',
   styleUrls: ['./date-selector.component.css']
 })
 export class DateSelectorComponent {
-  model: NgbDateStruct;
-  @Output() onDatePicked: EventEmitter<moment.Moment> = new EventEmitter<moment.Moment>();
-
+  @Input() label: string;
   /**
-   * Handling the date selection. Event is emitted and should be handled by the parent component if interested
+   * Parent form has all the validation pre-set up
    */
-  public onDateSelected(): void {
-    // The month index starts from 0 :(
-    const pickedDate = moment.utc([this.model.year, this.model.month - 1, this.model.day]);
-    this.onDatePicked.emit(pickedDate);
+  @Input() parentForm: FormGroup;
+  @Input() formControlTitle: string;
+
+  get formModel(): any {
+    return this.parentForm.get(this.formControlTitle) || null;
   }
 }

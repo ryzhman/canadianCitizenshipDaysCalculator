@@ -1,12 +1,16 @@
-<form class="form-inline">
-  <div class="form-group">
-    <div class="input-group">
-      <input class="form-control form-control-lg" placeholder="yyyy-mm-dd"
-             name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker"
-             (ngModelChange)="onDateSelected()">
-      <div class="input-group-append">
-        <button class="btn btn-outline-secondary fa fa-calendar" (click)="d.toggle()" type="button"></button>
-      </div>
+<div class="form-group">
+  <div [formGroup]="parentForm" class="input-group col-sm-12">
+    <label *ngIf="label" class="control-label">{{label}}</label>
+    <input class="form-control form-control-lg" placeholder="yyyy-mm-dd" name="dp"
+           [formControlName]="formControlTitle"
+           [ngClass]="{'is-invalid':formModel?.invalid && formModel?.touched}"
+           ngbDatepicker #d="ngbDatepicker"
+           id="{{formControlTitle}}"
+    >
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary fa fa-calendar"
+              (click)="d.toggle()"
+              type="button"></button>
     </div>
   </div>
-</form>
+</div>
