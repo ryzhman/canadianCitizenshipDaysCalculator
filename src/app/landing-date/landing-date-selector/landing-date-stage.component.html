@@ -12,24 +12,27 @@
         [formControlTitle]="'landingDate'"
         [parentForm]="formGroup"
         [formWarning]="'futureDateWarning'"
-        [validationWarningMessage]="'Landing date you entered is in the future'"
+        [formError]="'Landing date is required'"
       ></app-date-selector>
     </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn btn-light" [disabled]="!formGroup.valid"
-              (click)="onSubmit()">
-        Submit
-      </button>
-    </div>
   </form>
-</div>
 
-<div class="card-body" *ngIf="landingDate">
-  So far you have lived in Canada for about {{calculateResidencyTime()}} days.
-  <br>
-  Based on the current regulations, an applicant must live in Canada for 1,095 days.
-  <hr>
-  <div style="padding-left: 45%">
-    <button class="btn btn-outline-success" (click)="redirectToTripsStage()">Enter your trips</button>
+  <div *ngIf="landingDate">
+  <span *ngIf="calculateResidencyTime() > 0; else  futureLanding ">
+    So far you have lived in Canada for about {{calculateResidencyTime()}} days.
+  </span>
+    <!-- This template is declared locally and used by else block above -->
+    <ng-template #futureLanding>
+    <span>
+      Your landing date is in the future
+    </span>
+    </ng-template>
+
+    <br>
+    Based on the current regulations, an applicant must live in Canada for 1,095 days.
+    <hr>
+    <div style="padding-left: 45%">
+      <button class="btn btn-outline-success" (click)="redirectToTripsStage()">Enter your trips</button>
+    </div>
   </div>
 </div>

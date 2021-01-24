@@ -22,10 +22,12 @@ export class LandingDateStageComponent implements OnInit {
         Validators.required
       ])
     });
-    // this.formGroup.valueChanges.subscribe(newVal => console.log(newVal));
+    // each value change will trigger the validation
+    this.formGroup.get('landingDate').valueChanges
+      .subscribe(newVal => this.onDateSelected());
   }
 
-  onSubmit(): void {
+  onDateSelected(): void {
     if (this.formGroup && this.formGroup.controls.landingDate) {
       // The month index starts from 0 :(
       const pickedDate = moment.utc([this.formGroup.controls.landingDate.value.year,
