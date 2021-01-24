@@ -7,59 +7,50 @@
   </div>
 
   <div class="modal-body">
-    <div>
+    <form [formGroup]="formGroup" (validSubmit)="onSubmit()">
       <div class="form-group">
-<!--        TODO refactor into a separate component-->
-        <label for="typeahead-focus">Enter country</label>
+        <!--        TODO refactor into a separate component-->
+        <label class="control-label">Select country</label>
         <input
+          formControlName="Country"
           id="typeahead-focus"
           type="text"
           class="form-control form-control-lg"
-          [(ngModel)]="selectedCountry"
           [ngbTypeahead]="search"
           [inputFormatter]="formatter"
           [resultFormatter]="formatter"
-          [editable]='false'
-          [required]="true"
           [resultTemplate]="rt"
         />
-
         <ng-template #rt let-r="result" let-t="term">
           <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
           <p>{{r['alpha3']}}</p>
         </ng-template>
-<!--        <app-searchable-input [dataProvider]="countryService.getAll()" [searchByField]="'name'"-->
-<!--                              [(ngModel)]='newCountryName'-->
-<!--                              [id]="'countryName'" [labelText]="'Enter country'"></app-searchable-input>-->
+        <!--        <app-searchable-input [dataProvider]="countryService.getAll()" [searchByField]="'name'"-->
+        <!--                              [(ngModel)]='newCountryName'-->
+        <!--                              [id]="'countryName'" [labelText]="'Enter country'"></app-searchable-input>-->
       </div>
-    </div>
-    <div>
+
       <div class="form-group">
-        <label for="departureDate" class="label-default">Enter the date of departure from Canada</label>
-        <app-date-selector [fieldId]="'departureDate'"
-                           (onDatePicked)="handleSelectedDepartureDate($event)"></app-date-selector>
+        <app-date-selector [label]="'Departure date'"
+                           [formControlTitle]="'departureDate'"></app-date-selector>
       </div>
-    </div>
-    <div>
       <div class="form-group">
-        <label for="arrivalDate" class="label-default">Enter the date of arrival to Canada</label>
-        <app-date-selector [fieldId]="'arrivalDate'"
-                           (onDatePicked)="handleSelectedArrivalDate($event)"></app-date-selector>
+        <app-date-selector [label]="'Departure date'"
+                           [formControlTitle]="'arrivalDate'"></app-date-selector>
       </div>
-    </div>
-    <div>
       <div class="form-group">
-        <label for="notes" class="label-default">Enter the trip notes</label>
-        <input type="text" class="form-control form-control-lg" id="notes" [(ngModel)]="newTripNotes"
-               placeholder="Anything that can help you recall the trip later">
+        <label class="control-label">Trip notes</label>
+        <input type="text" class="form-control form-control-lg"
+               placeholder="Anything that can help you recall the trip later" formControlName="Notes">
       </div>
-    </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+        <button type="submit" class="btn btn-light" [disabled]="!formGroup.valid">Submit</button>
+      </div>
+    </form>
   </div>
 
-  <div class="modal-footer">
-    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
-    <button type="button" class="btn btn-light" (click)="saveTrip(); modal.close('Close click')">Submit</button>
-  </div>
 </ng-template>
 
 <button class="btn btn-outline-primary mb-2 mr-2" (click)="openNewTripModal(content)">Add trip</button>

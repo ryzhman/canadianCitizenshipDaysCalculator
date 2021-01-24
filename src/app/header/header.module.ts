@@ -8,6 +8,8 @@ import {LandingDateStageComponent} from '../landing-date/landing-date-selector/l
 import {TripsInfoComponent} from '../trips-info/trips-info/trips-info.component';
 import {TripsInfoModule} from '../trips-info/trips-info.module';
 import {AppDateCalculatorComponent} from '../app-date-caltulation/app-date-calculator/app-date-calculator.component';
+import {NgBootstrapFormValidationModule} from 'ng-bootstrap-form-validation';
+import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,8 @@ import {AppDateCalculatorComponent} from '../app-date-caltulation/app-date-calcu
     LandingDateModule,
     RouterModule,
     TripsInfoModule,
+    NgBootstrapFormValidationModule.forRoot(),
+    SharedModule,
     RouterModule.forRoot([
       {path: 'about', component: AboutComponent},
       {path: 'calculate-date', component: LandingDateStageComponent},

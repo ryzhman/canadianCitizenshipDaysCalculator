@@ -5,9 +5,21 @@
     or the date when you were granted a Permanent Resident card.
   </div>
   <br/>
-  <div class="container align-content-md-center" style="width: 50%">
-    <app-date-selector (onDatePicked)="handlePickedDate($event)"></app-date-selector>
-  </div>
+
+  <form [formGroup]="formGroup">
+    <div class="container align-content-md-center" style="width: 50%">
+      <app-date-selector
+        [formControlTitle]="'landingDate'"
+        [parentForm]="formGroup"
+      ></app-date-selector>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-light" [disabled]="!formGroup.valid"
+              (click)="onSubmit()">
+        Submit
+      </button>
+    </div>
+  </form>
 </div>
 
 <div class="card-body" *ngIf="landingDate">
