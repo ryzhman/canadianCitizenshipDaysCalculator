@@ -9,6 +9,7 @@ import {Country} from '../../../models/country';
 import {Observable, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {countryValidator} from '../validators/countryValidator';
 
 @Component({
   selector: 'app-new-trip',
@@ -73,20 +74,23 @@ export class NewTripComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = new FormGroup({
-      country: new FormControl('', [
-        Validators.required
-        // Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
-      ]),
+      country: new FormControl('', {
+        updateOn: 'blur',
+        validators: [
+          Validators.required,
+          countryValidator(this.countryService)
+        ]
+      }),
       arrivalDate: new FormControl('', [
-        Validators.required
+        Validators.required,
+        // TODO arrival date cannot be before departure
       ]),
       departureDate: new FormControl('', [
         Validators.required
+        // TODO departureDate cannot be before arrival
       ]),
       notes: new FormControl('', [
-        // Validators.required,
-        // Validators.minLength(8),
-        Validators.maxLength(4)
+        Validators.maxLength(50)
       ])
     });
   }
