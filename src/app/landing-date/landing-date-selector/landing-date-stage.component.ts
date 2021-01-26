@@ -12,7 +12,7 @@ export class LandingDateStageComponent implements OnInit {
   landingDate: moment.Moment;
   formGroup: FormGroup;
   landingDateValidator: FormControl;
-  private isValidDate = true;
+  isValidDate = true;
 
   constructor(private router: Router, private formBuilder: FormBuilder) {
   }

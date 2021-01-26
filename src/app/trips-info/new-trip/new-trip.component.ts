@@ -31,7 +31,7 @@ export class NewTripComponent implements OnInit {
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
-  private formGroup: FormGroup;
+  formGroup: FormGroup;
   private modalRef;
 
   search = (text$: Observable<string>) =>
@@ -73,11 +73,17 @@ export class NewTripComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = new FormGroup({
-      Country: new FormControl('', [
+      country: new FormControl('', [
         Validators.required
         // Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
       ]),
-      Notes: new FormControl('', [
+      arrivalDate: new FormControl('', [
+        Validators.required
+      ]),
+      departureDate: new FormControl('', [
+        Validators.required
+      ]),
+      notes: new FormControl('', [
         // Validators.required,
         // Validators.minLength(8),
         Validators.maxLength(4)

@@ -12,7 +12,7 @@
         <!--        TODO refactor into a separate component-->
         <label class="control-label">Select country</label>
         <input
-          formControlName="Country"
+          formControlName="country"
           id="typeahead-focus"
           type="text"
           class="form-control form-control-lg"
@@ -32,16 +32,18 @@
 
       <div class="form-group">
         <app-date-selector [label]="'Departure date'"
-                           [formControlTitle]="'departureDate'"></app-date-selector>
+                           [formControlTitle]="'departureDate'"
+                           [parentForm]="formGroup"></app-date-selector>
       </div>
       <div class="form-group">
         <app-date-selector [label]="'Departure date'"
-                           [formControlTitle]="'arrivalDate'"></app-date-selector>
+                           [formControlTitle]="'arrivalDate'"
+                           [parentForm]="formGroup"></app-date-selector>
       </div>
       <div class="form-group">
         <label class="control-label">Trip notes</label>
         <input type="text" class="form-control form-control-lg"
-               placeholder="Anything that can help you recall the trip later" formControlName="Notes">
+               placeholder="Anything that can help you recall the trip later" formControlName="notes">
       </div>
 
       <div class="modal-footer">
