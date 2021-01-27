@@ -98,7 +98,12 @@ export class NewTripComponent implements OnInit {
 
   onSubmit(): void {
     // this.saveTrip();
-    console.log('Valid submit: ' + this.formGroup);
     this.modalRef.close('Close click');
+    this.formGroup.reset();
+  }
+
+  onClose(): void {
+    this.modalRef.dismiss();
+    this.formGroup.reset();
   }
 }
