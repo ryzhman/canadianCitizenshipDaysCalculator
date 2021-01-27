@@ -24,9 +24,9 @@ import {SharedModule} from '../shared/shared.module';
     SharedModule,
     RouterModule.forRoot([
       {path: 'about', component: AboutComponent},
-      {path: 'calculate-date', component: LandingDateStageComponent},
-      {path: 'enter-trips-info', component: TripsInfoComponent},
-      {path: 'calculate-app-date', component: AppDateCalculatorComponent},
+      {path: 'landing-date', component: LandingDateStageComponent},
+      {path: 'trips-info', component: TripsInfoComponent},
+      {path: 'application-date', component: AppDateCalculatorComponent},
       {path: '', redirectTo: 'about', pathMatch: 'full'},
       {path: '**', redirectTo: 'about', pathMatch: 'full'}
     ]),

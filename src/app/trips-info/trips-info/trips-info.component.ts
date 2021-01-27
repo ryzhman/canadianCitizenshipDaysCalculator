@@ -70,7 +70,7 @@ export class TripsInfoComponent implements OnInit {
   }
 
   redirectToCalculationStage(): void {
-    this.router.navigate(['/calculate-app-date'], {
+    this.router.navigate(['/application-date'], {
       state: {
         data: {
           landingDate: this.landingDate.format(),

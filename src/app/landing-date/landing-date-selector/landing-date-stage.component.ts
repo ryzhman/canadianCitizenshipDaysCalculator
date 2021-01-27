@@ -49,6 +49,6 @@ export class LandingDateStageComponent implements OnInit {
   }
 
   redirectToTripsStage(): void {
-    this.router.navigate(['/enter-trips-info'], {state: {data: {landingDate: this.landingDate.format()}}});
+    this.router.navigate(['/trips-info'], {state: {data: {landingDate: this.landingDate.format()}}});
   }
 }

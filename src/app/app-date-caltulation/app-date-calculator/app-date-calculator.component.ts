@@ -31,4 +31,8 @@ export class AppDateCalculatorComponent implements OnInit {
   ngOnInit(): void {
     this.applicationDate = this.appDateCalculatorService.calculateApplicationDate(this.landingDate, this.trips);
   }
+
+  redirectTo(destination: string): void {
+    this.router.navigate([destination]);
+  }
 }
