@@ -34,9 +34,12 @@
         <app-date-selector [label]="'Departure date'"
                            [formControlTitle]="'departureDate'"
                            [parentForm]="formGroup"></app-date-selector>
+        <span class="is-invalid" *ngIf="formGroup.errors?.invalidateTripDates">
+          Departure date must be before arrival
+        </span>
       </div>
       <div class="form-group">
-        <app-date-selector [label]="'Departure date'"
+        <app-date-selector [label]="'Arrival date'"
                            [formControlTitle]="'arrivalDate'"
                            [parentForm]="formGroup"></app-date-selector>
       </div>

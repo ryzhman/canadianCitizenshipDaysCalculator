@@ -10,6 +10,7 @@ import {Observable, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {countryValidator} from '../validators/countryValidator';
+import {tripDateValidator} from '../validators/tripDateValidator';
 
 @Component({
   selector: 'app-new-trip',
@@ -83,15 +84,15 @@ export class NewTripComponent implements OnInit {
       }),
       arrivalDate: new FormControl('', [
         Validators.required,
-        // TODO arrival date cannot be before departure
       ]),
       departureDate: new FormControl('', [
-        Validators.required
-        // TODO departureDate cannot be before arrival
+        Validators.required,
       ]),
       notes: new FormControl('', [
         Validators.maxLength(50)
       ])
+    }, {
+      validators: tripDateValidator
     });
   }
 
