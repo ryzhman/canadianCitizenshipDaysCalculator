@@ -1,18 +1,18 @@
-<div class="card-body" *ngIf="landingDate">
-  <h1 class="card-title">Please enter the information about your trips abroad
-    since {{landingDate.format('MMM DD, yyyy')}}
+<div class="card-body col-sm-12 col-lg-12" *ngIf="landingDate">
+  <h1 class="card-title">Step 2: Information about your trips
+    since <p style="font-style: italic">{{landingDate.format('MMM DD, yyyy')}}</p>
   </h1>
 
-  <div style="width: 100%">
+  <div class="col-sm-12" style="padding-left: 0; padding-right: 0">
     <table class="table table-striped">
       <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col" sortable="name" (sort)="onSort($event)">Country</th>
-        <th scope="col" sortable="name" (sort)="onSort($event)">Departure Date</th>
-        <th scope="col" sortable="area" (sort)="onSort($event)">Arrival Date</th>
-        <th scope="col" sortable="population" (sort)="onSort($event)">Notes</th>
-      </tr>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col" sortable="name" (sort)="onSort($event)">Country</th>
+          <th scope="col" sortable="name" (sort)="onSort($event)">Departure Date</th>
+          <th scope="col" sortable="area" (sort)="onSort($event)">Arrival Date</th>
+          <th scope="col" sortable="population" (sort)="onSort($event)">Notes</th>
+        </tr>
       </thead>
 
       <tbody>
@@ -33,13 +33,14 @@
     </table>
   </div>
 
-  <div class="align-self-center">
-    <app-new-trip (onTripAdded)="refreshComponent($event)"></app-new-trip>
-  </div>
+  <div class="d-flex justify-content-between">
+    <div class="col-5 button-margin-left">
+      <app-new-trip (onTripAdded)="refreshComponent($event)"></app-new-trip>
+    </div>
 
-  <div class="card-title">
-    <div style="padding-left: 45%">
-      <button class="btn btn-outline-success" (click)="redirectToCalculationStage()">Calculate application date!</button>
+    <div class="col-5 button-margin-right">
+        <button class="btn btn-outline-success" (click)="redirectToCalculationStage()">Calculate application date!
+        </button>
     </div>
   </div>
 </div>

@@ -1,16 +1,22 @@
-<nav class="navbar navbar-light bg-light">
-  <a class="navbar-brand" href="/">
-    <img src="assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-    Days before.ca
-    <p class="brand-moto">
-      Calculate when to apply for Canadian citizenship with us
-    </p>
-  </a>
-  <ul class='nav nav-pills'>
-    <li><a class='nav-link' routerLinkActive='active' [routerLink]="['/welcome']">How to use</a></li>
-    <li><a class='nav-link' routerLinkActive='active' [routerLink]="['/calculate-date']">Calculate The Date</a></li>
-  </ul>
-</nav>
+<div class="head">
+  <nav class="navbar navbar-light bg-light col-sm-12 col-xs-12">
+    <a class="navbar-brand" href="/">
+      <div>
+        <img src="assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Days before.ca
+      </div>
+      <div class="brand-moto">
+        Calculate when to apply for Canadian citizenship
+      </div>
+    </a>
+    <div class="d-flex justify-content-between">
+      <ul class="nav nav-pills">
+        <li><a class='nav-link' routerLinkActive='active' [routerLink]="['/welcome']">How to use</a></li>
+        <li><a class='nav-link' routerLinkActive='active' [routerLink]="['/calculate-date']">Calculate The Date</a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
 
 
 <div class='container card-body'>

@@ -6,7 +6,7 @@
     </button>
   </div>
 
-  <div class="modal-body">
+  <div class="modal-body col-sm-12">
     <form [formGroup]="formGroup" (validSubmit)="onSubmit()">
       <div class="form-group">
         <!--        TODO refactor into a separate component-->
@@ -46,7 +46,7 @@
       <div class="form-group">
         <label class="control-label">Trip notes</label>
         <input type="text" class="form-control form-control-lg"
-               placeholder="Anything that can help you recall the trip later" formControlName="notes">
+               placeholder="Anything to help you recall the trip" formControlName="notes">
       </div>
 
       <div class="modal-footer">

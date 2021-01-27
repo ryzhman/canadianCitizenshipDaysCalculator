@@ -1,6 +1,6 @@
 <div class="form-group">
-  <div [formGroup]="parentForm" class="input-group col-sm-12">
-    <label *ngIf="label" class="control-label">{{label}}</label>
+  <label *ngIf="label" class="control-label">{{label}}</label>
+  <div [formGroup]="parentForm" class="input-group">
     <input class="form-control form-control-lg" placeholder="yyyy-mm-dd" name="dp"
            [formControlName]="formControlTitle"
            [ngClass]="{'is-invalid':formModel?.invalid && formModel?.touched}"

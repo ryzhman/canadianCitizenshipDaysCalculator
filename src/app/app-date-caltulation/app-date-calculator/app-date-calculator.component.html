@@ -1,8 +1,23 @@
 <div class="card-body">
-  <div class="main-message">
-    Based on the data you've provided you can apply for Canadian citizenship
+  <h1 class="modal-header">
+    Step 3: Application date
+  </h1>
+
+  <div class="modal-body">
+    <div class="col-lg-12">
+      Based on the data you've provided you can apply for Canadian citizenship
+    </div>
+    <h2 class="col-lg-12">
+      {{applicationDate | date  : 'mediumDate'}}
+    </h2>
   </div>
-  <div class="main-message">
-    {{applicationDate | date  : 'mediumDate'}}
+
+  <div class="modal-footer d-flex justify-content-between">
+    <button class="btn btn-outline-primary" (click)="redirectToCalculationStage()">
+      Modify landing date
+    </button>
+    <button class="btn btn-outline-primary" (click)="redirectToCalculationStage()">
+      Modify trips
+    </button>
   </div>
 </div>

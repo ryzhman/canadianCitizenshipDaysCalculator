@@ -1,4 +1,4 @@
-<div class="card-body">
+<div class="card-body col-sm-12">
   <h1 class="card-title">Step 1: Landing date</h1>
   <div class="card-text">
     Please provide the exact date of landing in Canada with a Permanent residency
@@ -7,7 +7,7 @@
   <br/>
 
   <form [formGroup]="formGroup">
-    <div class="container align-content-md-center" style="width: 50%">
+    <div class="container align-content-md-center col-sm-6">
       <app-date-selector
         [formControlTitle]="'landingDate'"
         [parentForm]="formGroup"
@@ -30,7 +30,7 @@
     <br>
     Based on the current regulations, an applicant must live in Canada for 1,095 days.
     <hr>
-    <div style="padding-left: 45%">
+    <div class="align-content-md-center">
       <button class="btn btn-outline-success" (click)="redirectToTripsStage()">Enter your trips</button>
     </div>
   </div>
