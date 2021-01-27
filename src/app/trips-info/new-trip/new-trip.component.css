@@ -10,3 +10,10 @@
 .light-blue-backdrop {
   background-color: #5cb3fd;
 }
+
+.invalid-trip-dates {
+  width: 100%;
+  margin-top: .25rem;
+  font-size: 80%;
+  color: #dc3545;
+}

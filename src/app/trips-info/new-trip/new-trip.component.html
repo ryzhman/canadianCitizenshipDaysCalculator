@@ -34,7 +34,7 @@
         <app-date-selector [label]="'Departure date'"
                            [formControlTitle]="'departureDate'"
                            [parentForm]="formGroup"></app-date-selector>
-        <span class="is-invalid" *ngIf="formGroup.errors?.invalidateTripDates">
+        <span class="invalid-trip-dates" *ngIf="formGroup.errors?.invalidateTripDates">
           Departure date must be before arrival
         </span>
       </div>
