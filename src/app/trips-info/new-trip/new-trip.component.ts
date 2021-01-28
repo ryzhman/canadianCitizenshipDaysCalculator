@@ -11,6 +11,7 @@ import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {countryValidator} from '../validators/countryValidator';
 import {tripDateValidator} from '../validators/tripDateValidator';
+import {DateUtils} from '../../../services/utils/dateUtils';
 
 @Component({
   selector: 'app-new-trip',
@@ -18,23 +19,18 @@ import {tripDateValidator} from '../validators/tripDateValidator';
   styleUrls: ['./new-trip.component.css']
 })
 export class NewTripComponent implements OnInit {
-
-  constructor(private modalService: NgbModal, private tripService: TripService, private countryService: CountryService) {
-  }
-
   closeResult: string;
   newCountryName: string;
-  newDepartureDate: Moment;
-  newArrivalDate: Moment;
   newTripNotes: string;
   @Output() onTripAdded: EventEmitter<boolean> = new EventEmitter<boolean>();
-  // TODO refactor into a separate component
-  selectedCountry: Country;
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
   formGroup: FormGroup;
   private modalRef;
+
+  constructor(private modalService: NgbModal, private tripService: TripService, private countryService: CountryService) {
+  }
 
   search = (text$: Observable<string>) =>
     text$.pipe(
@@ -54,23 +50,29 @@ export class NewTripComponent implements OnInit {
    * Posts new trip to the server and triggers the reload of the parent component
    */
   saveTrip(): void {
-    let country: Country = this.countryService.getByName(this.selectedCountry.name);
+    let country: Country = this.countryService.getByName(this.country.name);
     if (!country) {
       country = new Country();
       country.name = this.newCountryName;
     }
     // debugger;
-    const newTrip = new Trip(country, this.newDepartureDate.toDate(), this.newArrivalDate.toDate(), this.newTripNotes);
+    const newTrip = new Trip(country, this.departureDate.toDate(), this.arrivalDate.toDate(), this.newTripNotes);
     this.tripService.addTrip(newTrip);
     this.onTripAdded.emit(true);
   }
 
-  handleSelectedDepartureDate(date: moment.Moment): void {
-    this.newDepartureDate = date.utc(true);
+  get country(): Country {
+    return this.formGroup.get('country').value as Country;
   }
 
-  handleSelectedArrivalDate(date: moment.Moment): void {
-    this.newArrivalDate = date.utc(true);
+  get departureDate(): Moment {
+    const value = this.formGroup.get('departureDate').value;
+    return DateUtils.createMomentDate(value.year, value.month, value.day);
+  }
+
+  get arrivalDate(): Moment {
+    const value = this.formGroup.get('arrivalDate').value;
+    return DateUtils.createMomentDate(value.year, value.month, value.day);
   }
 
   ngOnInit(): void {
@@ -97,8 +99,8 @@ export class NewTripComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // this.saveTrip();
     this.modalRef.close('Close click');
+    this.saveTrip();
     this.formGroup.reset();
   }
 
