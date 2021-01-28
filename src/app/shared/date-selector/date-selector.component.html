@@ -1,11 +1,11 @@
 <div class="form-group no-bottom-padding">
-  <label *ngIf="label" class="control-label">{{label}}</label>
+  <label *ngIf="label" class="control-label required">{{label}}</label>
   <div [formGroup]="parentForm" class="input-group">
     <input class="form-control form-control-lg" placeholder="yyyy-mm-dd" name="dp"
            [formControlName]="formControlTitle"
            [ngClass]="{'is-invalid':formModel?.invalid && formModel?.touched}"
            ngbDatepicker #d="ngbDatepicker"
-           id="{{formControlTitle}}"
+           id="{{formControlTitle}}" required
     >
     <div class="input-group-append">
       <button class="btn btn-outline-secondary fa fa-calendar"

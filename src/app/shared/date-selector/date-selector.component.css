@@ -2,3 +2,10 @@
   padding-bottom: 0;
   margin-bottom: 0;
 }
+
+.control-label.required:after {
+  color: #d00;
+  content: "*";
+  margin-left: 5px;
+  top:7px;
+}

@@ -7,10 +7,10 @@
   </div>
 
   <div class="modal-body col-sm-12">
-    <form [formGroup]="formGroup" (validSubmit)="onSubmit()">
+    <form [formGroup]="formGroup" (validSubmit)="onSubmit()" autocomplete="off">
       <div class="form-group">
         <!--        TODO refactor into a separate component-->
-        <label class="control-label">Select country</label>
+        <label class="control-label required">Select country</label>
         <input
           formControlName="country"
           id="typeahead-focus"
@@ -20,6 +20,7 @@
           [inputFormatter]="formatter"
           [resultFormatter]="formatter"
           [resultTemplate]="rt"
+          required
         />
         <ng-template #rt let-r="result" let-t="term">
           <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
@@ -34,7 +35,7 @@
         <app-date-selector [label]="'Departure date'"
                            [formControlTitle]="'departureDate'"
                            [parentForm]="formGroup"></app-date-selector>
-        <span class="invalid-trip-dates" *ngIf="formGroup.errors?.invalidateTripDates">
+        <span class="invalid-trip-dates" *ngIf="formGroup.touched && formGroup.errors?.invalidateTripDates">
           Departure date must be before arrival
         </span>
       </div>
