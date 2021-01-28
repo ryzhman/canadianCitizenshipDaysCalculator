@@ -31,7 +31,6 @@ export class TripsInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // alert('Component is reloaded');
     this.tripService.getTrips().subscribe({
       next:
         trips => {

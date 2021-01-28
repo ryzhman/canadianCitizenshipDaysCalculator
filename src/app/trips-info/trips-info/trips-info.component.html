@@ -6,18 +6,19 @@
   <div class="col-sm-12" style="padding-left: 0; padding-right: 0">
     <table class="table table-striped">
       <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col" sortable="name" (sort)="onSort($event)">Country</th>
-          <th scope="col" sortable="name" (sort)="onSort($event)">Departure Date</th>
-          <th scope="col" sortable="area" (sort)="onSort($event)">Arrival Date</th>
-          <th scope="col" sortable="population" (sort)="onSort($event)">Notes</th>
-        </tr>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col" sortable="country" (sort)="onSort($event)">Country</th>
+        <th scope="col" sortable="departureDate" (sort)="onSort($event)">Departure Date</th>
+        <th scope="col" sortable="arrivalDate" (sort)="onSort($event)">Arrival Date</th>
+        <th scope="col">Notes</th>
+        <th scope="col"></th>
+      </tr>
       </thead>
 
       <tbody>
       <tr *ngFor="let trip of trips; let i = index">
-        <th scope="row">{{i + 1}}</th>
+        <th scope="row">{{trip.id + 1}}</th>
         <td>
           <div *ngIf="trip.country && trip.country.name">
             <img *ngIf="trip.country.fileUrl" [src]="'https://' + trip.country.fileUrl" class="mr-2"
@@ -28,6 +29,9 @@
         <td>{{ trip.departureDate | date : 'mediumDate'}}</td>
         <td>{{ trip.arrivalDate | date  : 'mediumDate'}}</td>
         <td>{{ trip.notes}}</td>
+        <td>
+          <app-edit-trip [trip]="trip" [trips]="trips"></app-edit-trip>
+        </td>
       </tr>
       </tbody>
     </table>
@@ -39,8 +43,8 @@
     </div>
 
     <div class="col-5 button-margin-right">
-        <button class="btn btn-outline-success" (click)="redirectToCalculationStage()">Calculate application date!
-        </button>
+      <button class="btn btn-outline-success" (click)="redirectToCalculationStage()">Calculate application date!
+      </button>
     </div>
   </div>
 </div>

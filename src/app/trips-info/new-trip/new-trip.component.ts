@@ -1,6 +1,5 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {NgbModal, NgbTypeahead} from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment';
+import {NgbModal, NgbModalRef, NgbTypeahead} from '@ng-bootstrap/ng-bootstrap';
 import {Moment} from 'moment';
 import {Trip} from '../../../models/trip';
 import {TripService} from '../../../services/trip.service';
@@ -27,7 +26,7 @@ export class NewTripComponent implements OnInit {
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
   formGroup: FormGroup;
-  private modalRef;
+  private modalRef: NgbModalRef;
 
   constructor(private modalService: NgbModal, private tripService: TripService, private countryService: CountryService) {
   }
@@ -43,12 +42,8 @@ export class NewTripComponent implements OnInit {
   formatter = (result: Country) => result.name;
 
   openNewTripModal(content): void {
-    // the same behavious for both close and dismiss
-    this.modalRef = this.modalService.open(content, {size: 'lg'}).result.then(() => {
-      this.onClose();
-    }, () => {
-      this.onClose();
-    });
+    // the same behaviour for both close and dismiss
+    this.modalRef = this.modalService.open(content, {size: 'lg'});
   }
 
   /**
@@ -61,7 +56,7 @@ export class NewTripComponent implements OnInit {
       country.name = this.newCountryName;
     }
     // debugger;
-    const newTrip = new Trip(country, this.departureDate.toDate(), this.arrivalDate.toDate(), this.newTripNotes);
+    const newTrip = new Trip(country, this.departureDate.toDate(), this.arrivalDate.toDate(), this.tripNotes);
     this.tripService.addTrip(newTrip);
     this.onTripAdded.emit(true);
   }
@@ -78,6 +73,10 @@ export class NewTripComponent implements OnInit {
   get arrivalDate(): Moment {
     const value = this.formGroup.get('arrivalDate').value;
     return DateUtils.createMomentDate(value.year, value.month, value.day);
+  }
+
+  get tripNotes(): string {
+    return this.formGroup.get('notes').value;
   }
 
   ngOnInit(): void {
@@ -110,7 +109,9 @@ export class NewTripComponent implements OnInit {
   }
 
   onClose(): void {
-    this.modalRef.dismiss();
+    if (this.modalRef) {
+      this.modalRef.dismiss();
+    }
     this.formGroup.reset();
   }
 }

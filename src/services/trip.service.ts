@@ -2,8 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {Trip} from '../models/trip';
-import {catchError, map, tap} from 'rxjs/operators';
-import {jsGlobalObjectValue} from '@angular/compiler-cli/src/ngtsc/partial_evaluator/src/known_declaration';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,16 +15,17 @@ export class TripService {
   }
 
   getTrips(): Observable<Trip[]> {
-    return this.http.get<Trip[]>(this.productUrl)
-      .pipe(
-        map(data => {
-          return data.concat(this.addedTrips);
-        }),
-        catchError(this.handleError)
-      );
+    return new Observable<Trip[]>(subscriber => subscriber.next(this.addedTrips));
+    // return this.http.get<Trip[]>(this.productUrl)
+    //   .pipe(
+    //     map(data => {
+    //       return data.concat(this.addedTrips);
+    //     }),
+    //     catchError(this.handleError)
+    //   );
   }
 
-  getProduct(id: number): Observable<Trip | undefined> {
+  getTrip(id: number): Observable<Trip | undefined> {
     return this.getTrips()
       .pipe(
         map((products: Trip[]) => products.find(p => p.id === id))
@@ -49,14 +49,25 @@ export class TripService {
   }
 
   addTrip(newTrip: Trip): void {
+    const nextId = this.addedTrips.length;
+    newTrip.id = nextId;
     this.addedTrips.push(newTrip);
-    // doing nothing so far
-    this.http.post<Trip>(this.productUrl, newTrip)
-      .pipe(
-        tap(data => {
-          console.log('trip was posted: ' + JSON.stringify(data));
-        }),
-        catchError(this.handleError)
-      );
+    // this.http.post<Trip>(this.productUrl, newTrip)
+    //   .pipe(
+    //     tap(data => {
+    //       console.log('trip was posted: ' + JSON.stringify(data));
+    //     }),
+    //     catchError(this.handleError)
+    //   );
+  }
+
+  upsert(trip: Trip): boolean {
+    const index = trip.id;
+    if (index >= 0) {
+      this.addedTrips[index] = trip;
+    } else {
+      this.addTrip(trip);
+    }
+    return true;
   }
 }
