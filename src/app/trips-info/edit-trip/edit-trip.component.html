@@ -1,0 +1,60 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Edit trip</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.close('Click cross')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body col-sm-12">
+    <form [formGroup]="formGroup" (validSubmit)="onSubmit(modal)" autocomplete="off">
+      <div class="form-group">
+        <!--        TODO refactor into a separate component-->
+        <label class="control-label required">Select country</label>
+        <input
+          formControlName="country"
+          id="typeahead-focus"
+          type="text"
+          class="form-control form-control-lg"
+          [ngbTypeahead]="search"
+          [inputFormatter]="formatter"
+          [resultFormatter]="formatter"
+          required
+          [value]="trip.country.name"
+        />
+      </div>
+
+      <div class="form-group">
+        <app-date-selector [label]="'Departure date'"
+                           [formControlTitle]="'departureDate'"
+                           [parentForm]="formGroup"
+                           [value]="trip.departureDate"></app-date-selector>
+        <span class="invalid-trip-dates" *ngIf="formGroup.touched && formGroup.errors?.invalidateTripDates">
+          Departure date must be before arrival
+        </span>
+      </div>
+      <div class="form-group">
+        <app-date-selector [label]="'Arrival date'"
+                           [formControlTitle]="'arrivalDate'"
+                           [parentForm]="formGroup"
+                           [value]="trip.arrivalDate"></app-date-selector>
+      </div>
+      <div class="form-group">
+        <label class="control-label">Trip notes</label>
+        <input type="text" class="form-control form-control-lg"
+               placeholder="Anything to help you recall the trip" formControlName="notes"
+               [value]="trip.notes">
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+        <button type="button" class="btn btn-outline-danger" (click)="deleteTrip(trip, modal)">Delete</button>
+        <button type="submit" class="btn btn-outline-primary" [disabled]="!formGroup.valid">Save</button>
+      </div>
+    </form>
+  </div>
+
+</ng-template>
+
+<button class="btn fa fa-pencil-square-o fa-lg" aria-hidden="true" (click)="openEditTrip(content)">
+</button>

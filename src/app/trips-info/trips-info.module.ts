@@ -8,6 +8,7 @@ import {SharedModule} from '../shared/shared.module';
 import {NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppDateCalculationModule} from '../app-date-caltulation/app-date-calculation.module';
 import {NgBootstrapFormValidationModule} from 'ng-bootstrap-form-validation';
+import {EditTripComponent} from './edit-trip/edit-trip.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import {NgBootstrapFormValidationModule} from 'ng-bootstrap-form-validation';
   declarations: [
     TripsInfoComponent,
     NewTripComponent,
-    SortableHeaderDirective
+    SortableHeaderDirective,
+    EditTripComponent
   ]
 })
 export class TripsInfoModule {
