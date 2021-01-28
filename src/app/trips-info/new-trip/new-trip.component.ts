@@ -43,7 +43,12 @@ export class NewTripComponent implements OnInit {
   formatter = (result: Country) => result.name;
 
   openNewTripModal(content): void {
-    this.modalRef = this.modalService.open(content, {size: 'lg'});
+    // the same behavious for both close and dismiss
+    this.modalRef = this.modalService.open(content, {size: 'lg'}).result.then(() => {
+      this.onClose();
+    }, () => {
+      this.onClose();
+    });
   }
 
   /**
