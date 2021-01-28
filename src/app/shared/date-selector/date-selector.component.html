@@ -6,6 +6,7 @@
            [ngClass]="{'is-invalid':formModel?.invalid && formModel?.touched}"
            ngbDatepicker #d="ngbDatepicker"
            id="{{formControlTitle}}" required
+           [value] = value
     >
     <div class="input-group-append">
       <button class="btn btn-outline-secondary fa fa-calendar"

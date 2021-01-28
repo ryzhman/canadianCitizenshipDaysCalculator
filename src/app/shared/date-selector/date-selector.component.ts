@@ -18,6 +18,7 @@ export class DateSelectorComponent {
   @Input() parentForm: FormGroup;
   @Input() formControlTitle: string;
   @Input() formError: string;
+  @Input() value: Date;
 
   get formModel(): any {
     return this.parentForm.get(this.formControlTitle) || null;
