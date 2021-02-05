@@ -52,8 +52,7 @@ export class NewTripComponent implements OnInit {
   saveTrip(): void {
     let country: Country = this.countryService.getByName(this.country.name);
     if (!country) {
-      country = new Country();
-      country.name = this.newCountryName;
+      country = new Country(this.newCountryName);
     }
     // debugger;
     const newTrip = new Trip(country, this.departureDate.toDate(), this.arrivalDate.toDate(), this.tripNotes);

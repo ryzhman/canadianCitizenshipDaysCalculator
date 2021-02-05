@@ -4,7 +4,13 @@
   </h1>
 
   <div class="col-sm-12" style="padding-left: 0; padding-right: 0">
-    <table class="table table-striped">
+    <div *ngIf="errorMessage | async" class="alert alert-danger">
+      {{errorMessage}}
+    </div>
+    <h3 *ngIf="!(trips$ | async)">
+      No trips were added yet
+    </h3>
+    <table *ngIf="trips$ | async as trips" class="table table-striped">
       <thead>
       <tr>
         <th scope="col">#</th>
@@ -30,7 +36,7 @@
         <td>{{ trip.arrivalDate | date  : 'mediumDate'}}</td>
         <td>{{ trip.notes}}</td>
         <td>
-          <app-edit-trip [trip]="trip" [trips]="trips"></app-edit-trip>
+          <!--          <app-edit-trip [trip]="trip" [trips]="trips$"></app-edit-trip>-->
         </td>
       </tr>
       </tbody>

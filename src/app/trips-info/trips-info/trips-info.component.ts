@@ -1,12 +1,13 @@
-import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, QueryList, ViewChildren} from '@angular/core';
 import * as moment from 'moment';
 import {Moment} from 'moment';
 import {Router} from '@angular/router';
 import {TripService} from '../../../services/trip.service';
-import {Trip} from '../../../models/trip';
 import {SortableHeaderDirective, SortEvent} from '../sortable-header.directive';
 import {Country} from '../../../models/country';
 import {CountryService} from '../../../services/country/country.service';
+import {BehaviorSubject, EMPTY} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 const compare = (v1: string | number | Date | Country, v2: string | number | Date | Country) => v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
 
@@ -16,10 +17,21 @@ const compare = (v1: string | number | Date | Country, v2: string | number | Dat
   templateUrl: './trips-info.component.html',
   styleUrls: ['./trips-info.component.css']
 })
-export class TripsInfoComponent implements OnInit {
+export class TripsInfoComponent {
   landingDate: Moment;
-  trips: Trip[];
   @ViewChildren(SortableHeaderDirective) headers: QueryList<SortableHeaderDirective>;
+  // trips info
+  trips$ = this.tripService.allTripsWithCountries$.pipe(
+    catchError(err => {
+        this.errorMessageSubject.next(err.message);
+        return EMPTY;
+      }
+    )
+  );
+
+  // errors
+  errorMessageSubject = new BehaviorSubject<string>('');
+  errorMessage = this.errorMessageSubject.asObservable();
 
   constructor(private router: Router, private tripService: TripService, private countryService: CountryService) {
     if (router.getCurrentNavigation().extras.state
@@ -28,19 +40,6 @@ export class TripsInfoComponent implements OnInit {
       // deserialization of date and getting it to UTC
       this.landingDate = moment(router.getCurrentNavigation().extras.state.data.landingDate).utc();
     }
-  }
-
-  ngOnInit(): void {
-    this.tripService.getTrips().subscribe({
-      next:
-        trips => {
-          this.trips = trips;
-          // find and populate countries based on provided data source
-          this.trips.forEach(trip => {
-            trip.country = this.countryService.getByName(trip.country.name);
-          });
-        }
-    });
   }
 
   onSort({column, direction}: SortEvent): void {
@@ -55,16 +54,15 @@ export class TripsInfoComponent implements OnInit {
     if (direction === '' || column === '') {
       // this.countries = trips;
     } else {
-      this.trips = this.trips.sort((a, b) => {
-        const res = compare(a[column], b[column]);
-        return direction === 'asc' ? res : -res;
-      });
+      // this.trips$ = this.trips$.sort((a, b) => {
+      //   const res = compare(a[column], b[column]);
+      //   return direction === 'asc' ? res : -res;
+      // });
     }
   }
 
   refreshComponent(isRefreshRequired: boolean): void {
     if (isRefreshRequired) {
-      this.ngOnInit();
     }
   }
 
@@ -73,7 +71,7 @@ export class TripsInfoComponent implements OnInit {
       state: {
         data: {
           landingDate: this.landingDate.format(),
-          trips: this.trips
+          trips: this.trips$
         }
       }
     });
