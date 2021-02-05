@@ -23,8 +23,8 @@
       </thead>
 
       <tbody>
-      <tr *ngFor="let trip of trips; let i = index">
-        <th scope="row">{{trip.id + 1}}</th>
+      <tr *ngFor="let trip of trips">
+        <th scope="row">{{trip.id}}</th>
         <td>
           <div *ngIf="trip.country && trip.country.name">
             <img *ngIf="trip.country.fileUrl" [src]="'https://' + trip.country.fileUrl" class="mr-2"

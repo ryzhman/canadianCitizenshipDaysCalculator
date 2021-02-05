@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {BehaviorSubject, combineLatest, merge, Observable, of, throwError} from 'rxjs';
+import {combineLatest, merge, Observable, of, Subject, throwError} from 'rxjs';
 import {Trip} from '../models/trip';
-import {map, scan} from 'rxjs/operators';
+import {map, scan, tap} from 'rxjs/operators';
 import {CountryService} from './country/country.service';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class TripService {
   // initial list of trips. TODO update with DB fetch
   initialTrips$: Observable<Trip[]> = of([]);
   // when a new trip is added it is published here
-  private newTripSubject = new BehaviorSubject<Trip>(null);
+  private newTripSubject = new Subject<Trip>();
   addedTrip$ = this.newTripSubject.asObservable();
   // existing and new trips are merged
   updatedTrips$ = merge(
@@ -21,20 +21,27 @@ export class TripService {
   ).pipe(
     // update the list of existing trips with a new one
     scan((existingTrips: Trip[], newTrip: Trip) =>
-      [...existingTrips, newTrip])
+      [...existingTrips, newTrip]),
   );
+  // stream with a single max ID elem
+  maxTripId$ = this.updatedTrips$.pipe(
+    map(trips => Math.max(...trips.map(trip => trip.id ? trip.id : 0), 0))
+  );
+  // finalized stream
   allTripsWithCountries$ = combineLatest([
     this.updatedTrips$,
-    this.countryService.countries$
+    this.maxTripId$
   ])
     .pipe(
-      map(([trips, countries]) =>
+      map(([trips, maxExistingId]) =>
         // find and populate countries based on provided data source
         trips.map(trip => ({
           ...trip,
-          country: this.countryService.getByName(trip.country.name)
+          country: this.countryService.getByName(trip.country.name),
+          id: ++maxExistingId
         } as Trip))
-      )
+      ),
+      tap(item => console.log('Trips with countries' + JSON.stringify(item)))
     );
 
   constructor(private http: HttpClient, private countryService: CountryService) {
@@ -64,16 +71,7 @@ export class TripService {
   }
 
   addTrip(newTrip: Trip): void {
-    // const nextId = this.addedTrips.length;
-    // newTrip.id = nextId;
-    // this.addedTrips.push(newTrip);
-    // this.http.post<Trip>(this.productUrl, newTrip)
-    //   .pipe(
-    //     tap(data => {
-    //       console.log('trip was posted: ' + JSON.stringify(data));
-    //     }),
-    //     catchError(this.handleError)
-    //   );
+    this.newTripSubject.next(newTrip);
   }
 
   upsert(trip: Trip): boolean {

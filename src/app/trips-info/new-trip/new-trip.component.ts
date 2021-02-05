@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgbModal, NgbModalRef, NgbTypeahead} from '@ng-bootstrap/ng-bootstrap';
 import {Moment} from 'moment';
 import {Trip} from '../../../models/trip';
@@ -21,7 +21,6 @@ export class NewTripComponent implements OnInit {
   closeResult: string;
   newCountryName: string;
   newTripNotes: string;
-  @Output() onTripAdded: EventEmitter<boolean> = new EventEmitter<boolean>();
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
@@ -54,10 +53,8 @@ export class NewTripComponent implements OnInit {
     if (!country) {
       country = new Country(this.newCountryName);
     }
-    // debugger;
     const newTrip = new Trip(country, this.departureDate.toDate(), this.arrivalDate.toDate(), this.tripNotes);
     this.tripService.addTrip(newTrip);
-    this.onTripAdded.emit(true);
   }
 
   get country(): Country {
