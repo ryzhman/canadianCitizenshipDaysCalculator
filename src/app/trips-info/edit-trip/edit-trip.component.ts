@@ -23,7 +23,6 @@ export class EditTripComponent implements OnInit {
   closeResult: string;
   newCountryName: string;
   newTripNotes: string;
-  @Output() onTripEdited: EventEmitter<boolean> = new EventEmitter<boolean>();
   @ViewChild('instance', {static: true}) instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
@@ -39,7 +38,7 @@ export class EditTripComponent implements OnInit {
       filter(term => term.length >= 2),
       map(term => (term === '' ? this.countryService.getAll()
         : this.countryService.getAll().filter(item => item.name.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
-    );
+    )
   formatter = (result: Country) => result.name;
 
   openEditTrip(content): void {
@@ -82,7 +81,6 @@ export class EditTripComponent implements OnInit {
     const newTrip = new Trip(country, this.departureDate.toDate(), this.arrivalDate.toDate(), this.tripNotes);
     newTrip.id = this.trip.id;
     this.tripService.upsert(newTrip);
-    this.onTripEdited.emit(true);
   }
 
   deleteTrip(trip: Trip, modal: any): void {

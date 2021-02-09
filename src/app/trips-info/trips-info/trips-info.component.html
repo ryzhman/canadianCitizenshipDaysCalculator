@@ -7,10 +7,8 @@
     <div *ngIf="errorMessage | async" class="alert alert-danger">
       {{errorMessage}}
     </div>
-    <h3 *ngIf="!(trips$ | async)">
-      No trips were added yet
-    </h3>
-    <table *ngIf="trips$ | async as trips" class="table table-striped">
+
+    <table *ngIf="(trips$ | async) as trips; else emptyTrips" class="table table-striped">
       <thead>
       <tr>
         <th scope="col">#</th>
@@ -36,16 +34,22 @@
         <td>{{ trip.arrivalDate | date  : 'mediumDate'}}</td>
         <td>{{ trip.notes}}</td>
         <td>
-          <!--          <app-edit-trip [trip]="trip" [trips]="trips$"></app-edit-trip>-->
+          <app-edit-trip [trip]="trip" [trips]="trips"></app-edit-trip>
         </td>
       </tr>
       </tbody>
     </table>
+
+    <ng-template #emptyTrips>
+      <h3>
+        No trips were added yet
+      </h3>
+    </ng-template>
   </div>
 
   <div class="d-flex justify-content-between">
     <div class="col-5 button-margin-left">
-      <app-new-trip (onTripAdded)="refreshComponent($event)"></app-new-trip>
+      <app-new-trip></app-new-trip>
     </div>
 
     <div class="col-5 button-margin-right">

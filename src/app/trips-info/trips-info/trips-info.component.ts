@@ -28,7 +28,6 @@ export class TripsInfoComponent {
       }
     )
   );
-
   // errors
   errorMessageSubject = new BehaviorSubject<string>('');
   errorMessage = this.errorMessageSubject.asObservable();
@@ -58,11 +57,6 @@ export class TripsInfoComponent {
       //   const res = compare(a[column], b[column]);
       //   return direction === 'asc' ? res : -res;
       // });
-    }
-  }
-
-  refreshComponent(isRefreshRequired: boolean): void {
-    if (isRefreshRequired) {
     }
   }
 
