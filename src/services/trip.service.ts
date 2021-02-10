@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {combineLatest, merge, Observable, of, Subject, throwError} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, throwError} from 'rxjs';
 import {Trip} from '../models/trip';
-import {map, scan, tap} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import {CountryService} from './country/country.service';
 
 @Injectable({
@@ -10,49 +10,84 @@ import {CountryService} from './country/country.service';
 })
 export class TripService {
   // initial list of trips. TODO update with DB fetch
-  initialTrips$: Observable<Trip[]> = of([]);
+  private initialTripsSubject = new BehaviorSubject<Trip[]>([]);
+  initialTrips$ = this.initialTripsSubject.asObservable();
+  // initialTrips$: Observable<Trip[]> = of([]);
   // when a new trip is added it is published here
-  private newTripSubject = new Subject<Trip>();
+  private newTripSubject = new BehaviorSubject<Trip>(null);
   addedTrip$ = this.newTripSubject.asObservable();
-  // existing and new trips are merged
-  updatedTrips$ = merge(
+  // updated trips
+  private updatedTripSubject = new BehaviorSubject<Trip>(null);
+  editedTrip$ = this.updatedTripSubject.asObservable();
+  private deleteTripSubject = new BehaviorSubject<number>(0);
+  deletedTrip$ = this.deleteTripSubject.asObservable();
+
+  updatedTrips$ = combineLatest([
     this.initialTrips$,
-    this.addedTrip$
-  ).pipe(
-    // update the list of existing trips with a new one
-    scan((existingTrips: Trip[], newTrip: Trip) =>
-      [...existingTrips, newTrip]),
+    this.addedTrip$,
+    this.editedTrip$
+  ]).pipe(
+    map(([existingTrips, newTrip, editedTrip]) => {
+        if (editedTrip) {
+          existingTrips.map(item => {
+            if (editedTrip && item.id === editedTrip.id) {
+              item.country = editedTrip.country;
+              item.departureDate = editedTrip.departureDate;
+              item.arrivalDate = editedTrip.arrivalDate;
+              item.notes = editedTrip.notes;
+            }
+            return item;
+          });
+        }
+        if (newTrip) {
+          existingTrips.push(newTrip);
+        }
+        return existingTrips;
+      }
+    )
   );
-  // stream with a single max ID elem
-  maxTripId$ = this.updatedTrips$.pipe(
-    map(trips => Math.max(...trips.map(trip => trip.id ? trip.id : 0), 0))
-  );
+
   // finalized stream
-  allTripsWithCountries$ = combineLatest([
-    this.updatedTrips$,
-    this.maxTripId$
-  ])
-    .pipe(
-      map(([trips, maxExistingId]) =>
-        // find and populate countries based on provided data source
-        trips.map(trip => ({
-          ...trip,
-          country: this.countryService.getByName(trip.country.name),
-          id: ++maxExistingId
-        } as Trip))
-      ),
-      tap(item => console.log('Trips with countries' + JSON.stringify(item)))
-    );
+  // allTripsWithCountries$ = combineLatest([
+  //   this.updatedTrips$,
+  //   // this.maxTripId$,
+  //   // this.deletedTrip$
+  // ])
+  //   .pipe(
+  //     // map(([trips, maxTripId, deletedTripId]) => {
+  //     //   trips.
+  //     // }),
+  //     map(([trips, maxExistingId]) => {
+  //       if (trips.length > 0) {
+  //         // find and populate countries based on provided data source
+  //         return trips.map(trip => ({
+  //           ...trip,
+  //             country: this.countryService.getByName(trip.country.name),
+  //             id: ++maxExistingId
+  //           } as Trip));
+  //         }
+  //       }
+  //     ),
+  //     tap(item => console.log('Trips with countries' + JSON.stringify(item)))
+  //   );
+
+  allTripsWithCountries$ = this.updatedTrips$.pipe(
+    map(trips => {
+        if (trips.length > 0) {
+          let maxId = Math.max(...trips.map(trip => trip.id ? trip.id : 0), 0);
+          // find and populate countries based on provided data source
+          return trips.map(trip => ({
+            ...trip,
+            country: this.countryService.getByName(trip.country.name),
+            id: ++maxId
+          } as Trip));
+        }
+      }
+    ),
+  );
 
   constructor(private http: HttpClient, private countryService: CountryService) {
   }
-
-  // getTrip(id: number): Observable<Trip | undefined> {
-  //   return this.getTrips()
-  //     .pipe(
-  //       map((products: Trip[]) => products.find(p => p.id === id))
-  //     );
-  // }
 
   private handleError(err: HttpErrorResponse): Observable<never> {
     // in a real world app, we may send the server to some remote logging infrastructure
@@ -74,13 +109,17 @@ export class TripService {
     this.newTripSubject.next(newTrip);
   }
 
+  editTrip(editedTrip: Trip): void {
+    this.updatedTripSubject.next(editedTrip);
+  }
+
   upsert(trip: Trip): boolean {
     const index = trip.id;
-    if (index >= 0) {
-      // this.addedTrips[index] = trip;
-    } else {
-      this.addTrip(trip);
-    }
+    index >= 0 ? this.editTrip(trip) : this.addTrip(trip);
     return true;
+  }
+
+  deleteTrip(tripId: number): void {
+    // this.deleteTripSubject.emit(tripId);
   }
 }
