@@ -84,7 +84,7 @@ export class EditTripComponent implements OnInit {
   }
 
   deleteTrip(trip: Trip, modal: any): void {
-    this.trips.splice(trip.id, 1);
+    this.tripService.deleteTrip(trip);
     modal.close();
   }
 

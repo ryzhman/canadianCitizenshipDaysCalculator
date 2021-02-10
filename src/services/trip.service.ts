@@ -4,7 +4,7 @@ import {BehaviorSubject, combineLatest, Observable, throwError} from 'rxjs';
 import {Trip} from '../models/trip';
 import {map} from 'rxjs/operators';
 import {CountryService} from './country/country.service';
-import {TripUpdate, Operation} from '../models/tripUpdate';
+import {Operation, TripUpdate} from '../models/tripUpdate';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,9 @@ export class TripService {
   // when a trip is updated it is published here
   private tripUpdateSubject = new BehaviorSubject<TripUpdate>(null);
   tripUpdate$ = this.tripUpdateSubject.asObservable();
+
+  private tripDeletionSubject = new BehaviorSubject<TripUpdate>(null);
+  private tripDeleted$ = this.tripDeletionSubject.asObservable();
 
   updatedTrips$ = combineLatest([
     this.initialTrips$,
@@ -40,9 +43,6 @@ export class TripService {
               });
               break;
             }
-            case Operation.DELETE: {
-              break;
-            }
             default: {
               throw Error('Unknown operation');
             }
@@ -53,10 +53,22 @@ export class TripService {
     )
   );
 
+  updatedTripsIncludingRemovals$ = combineLatest([
+    this.updatedTrips$,
+    this.tripDeleted$
+  ]).pipe(
+    map(([existingTrips, tripToDelete]) => {
+      if (tripToDelete && tripToDelete.operation === Operation.DELETE) {
+        existingTrips.splice(tripToDelete.trip.id - 1, 1);
+      }
+      return existingTrips;
+    })
+  );
+
   /**
    * This operation required in order to read decorate objects fetched from DB with a Country information
    */
-  allTripsWithCountries$ = this.updatedTrips$.pipe(
+  allTripsWithCountries$ = this.updatedTripsIncludingRemovals$.pipe(
     map(trips => {
         if (trips.length > 0) {
           // find and populate countries based on provided data source
@@ -102,8 +114,7 @@ export class TripService {
     return true;
   }
 
-  deleteTrip(tripId: number): void {
-    // TODO replace null
-    this.tripUpdateSubject.next(new TripUpdate(Operation.DELETE, null));
+  deleteTrip(trip: Trip): void {
+    this.tripDeletionSubject.next(new TripUpdate(Operation.DELETE, trip));
   }
 }
