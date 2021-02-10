@@ -4,6 +4,7 @@ import {BehaviorSubject, combineLatest, Observable, throwError} from 'rxjs';
 import {Trip} from '../models/trip';
 import {map} from 'rxjs/operators';
 import {CountryService} from './country/country.service';
+import {TripUpdate, Operation} from '../models/tripUpdate';
 
 @Injectable({
   providedIn: 'root'
@@ -12,74 +13,56 @@ export class TripService {
   // initial list of trips. TODO update with DB fetch
   private initialTripsSubject = new BehaviorSubject<Trip[]>([]);
   initialTrips$ = this.initialTripsSubject.asObservable();
-  // initialTrips$: Observable<Trip[]> = of([]);
-  // when a new trip is added it is published here
-  private newTripSubject = new BehaviorSubject<Trip>(null);
-  addedTrip$ = this.newTripSubject.asObservable();
-  // updated trips
-  private updatedTripSubject = new BehaviorSubject<Trip>(null);
-  editedTrip$ = this.updatedTripSubject.asObservable();
-  private deleteTripSubject = new BehaviorSubject<number>(0);
-  deletedTrip$ = this.deleteTripSubject.asObservable();
+
+  // when a trip is updated it is published here
+  private tripUpdateSubject = new BehaviorSubject<TripUpdate>(null);
+  tripUpdate$ = this.tripUpdateSubject.asObservable();
 
   updatedTrips$ = combineLatest([
     this.initialTrips$,
-    this.addedTrip$,
-    this.editedTrip$
+    this.tripUpdate$
   ]).pipe(
-    map(([existingTrips, newTrip, editedTrip]) => {
-        if (editedTrip) {
-          existingTrips.map(item => {
-            if (editedTrip && item.id === editedTrip.id) {
-              item.country = editedTrip.country;
-              item.departureDate = editedTrip.departureDate;
-              item.arrivalDate = editedTrip.arrivalDate;
-              item.notes = editedTrip.notes;
+    map(([existingTrips, tripToUpdate]) => {
+        if (tripToUpdate) {
+          switch (tripToUpdate.operation) {
+            case Operation.EDIT: {
+              const editedTrip = tripToUpdate.trip;
+              existingTrips.map(item => {
+                return (editedTrip && item.id === editedTrip.id) ? Object.assign(item, editedTrip) : item;
+              });
+              break;
             }
-            return item;
-          });
-        }
-        if (newTrip) {
-          existingTrips.push(newTrip);
+            case Operation.CREATE: {
+              let maxId = Math.max(...existingTrips.map(trip => trip.id ? trip.id : 0), 0);
+              existingTrips.push({
+                ...tripToUpdate.trip,
+                id: ++maxId
+              });
+              break;
+            }
+            case Operation.DELETE: {
+              break;
+            }
+            default: {
+              throw Error('Unknown operation');
+            }
+          }
         }
         return existingTrips;
       }
     )
   );
 
-  // finalized stream
-  // allTripsWithCountries$ = combineLatest([
-  //   this.updatedTrips$,
-  //   // this.maxTripId$,
-  //   // this.deletedTrip$
-  // ])
-  //   .pipe(
-  //     // map(([trips, maxTripId, deletedTripId]) => {
-  //     //   trips.
-  //     // }),
-  //     map(([trips, maxExistingId]) => {
-  //       if (trips.length > 0) {
-  //         // find and populate countries based on provided data source
-  //         return trips.map(trip => ({
-  //           ...trip,
-  //             country: this.countryService.getByName(trip.country.name),
-  //             id: ++maxExistingId
-  //           } as Trip));
-  //         }
-  //       }
-  //     ),
-  //     tap(item => console.log('Trips with countries' + JSON.stringify(item)))
-  //   );
-
+  /**
+   * This operation required in order to read decorate objects fetched from DB with a Country information
+   */
   allTripsWithCountries$ = this.updatedTrips$.pipe(
     map(trips => {
         if (trips.length > 0) {
-          let maxId = Math.max(...trips.map(trip => trip.id ? trip.id : 0), 0);
           // find and populate countries based on provided data source
           return trips.map(trip => ({
             ...trip,
             country: this.countryService.getByName(trip.country.name),
-            id: ++maxId
           } as Trip));
         }
       }
@@ -106,11 +89,11 @@ export class TripService {
   }
 
   addTrip(newTrip: Trip): void {
-    this.newTripSubject.next(newTrip);
+    this.tripUpdateSubject.next(new TripUpdate(Operation.CREATE, newTrip));
   }
 
   editTrip(editedTrip: Trip): void {
-    this.updatedTripSubject.next(editedTrip);
+    this.tripUpdateSubject.next(new TripUpdate(Operation.EDIT, editedTrip));
   }
 
   upsert(trip: Trip): boolean {
@@ -120,6 +103,7 @@ export class TripService {
   }
 
   deleteTrip(tripId: number): void {
-    // this.deleteTripSubject.emit(tripId);
+    // TODO replace null
+    this.tripUpdateSubject.next(new TripUpdate(Operation.DELETE, null));
   }
 }
