@@ -26,18 +26,19 @@ export class TripService {
     this.tripUpdate$
   ]).pipe(
     map(([existingTrips, tripToUpdate]) => {
+        const existingTripsCopy = Object.assign([], existingTrips);
         if (tripToUpdate) {
           switch (tripToUpdate.operation) {
             case Operation.EDIT: {
               const editedTrip = tripToUpdate.trip;
-              existingTrips.map(item => {
+              existingTripsCopy.map(item => {
                 return (editedTrip && item.id === editedTrip.id) ? Object.assign(item, editedTrip) : item;
               });
               break;
             }
             case Operation.CREATE: {
-              let maxId = Math.max(...existingTrips.map(trip => trip.id ? trip.id : 0), 0);
-              existingTrips.push({
+              let maxId = Math.max(...existingTripsCopy.map(trip => trip.id ? trip.id : 0), 0);
+              existingTripsCopy.push({
                 ...tripToUpdate.trip,
                 id: ++maxId
               });
@@ -48,7 +49,7 @@ export class TripService {
             }
           }
         }
-        return existingTrips;
+        return existingTripsCopy;
       }
     )
   );
