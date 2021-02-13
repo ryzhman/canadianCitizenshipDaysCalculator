@@ -1,0 +1,12 @@
+.instructions {
+  margin-left: 5%;
+  font-size: 1.5rem;
+}
+.emphasized {
+  font-style: italic;
+  text-decoration: underline;
+}
+
+.block {
+  margin-top: 4%;
+}

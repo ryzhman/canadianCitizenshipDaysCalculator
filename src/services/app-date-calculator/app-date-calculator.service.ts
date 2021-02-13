@@ -21,10 +21,12 @@ export class AppDateCalculatorService {
    */
   calculateDaysAbroad(trips: Trip[]): number {
     let numberOfDaysAbroad = 0;
-    trips.forEach(trip => {
-      // manually one day to include the first day (the last is included by default)
-      numberOfDaysAbroad += moment(trip.arrivalDate).utc(true).diff(moment(trip.departureDate).utc(true), 'days') + 1;
-    });
+    if (trips) {
+      trips.forEach(trip => {
+        // manually one day to include the first day (the last is included by default)
+        numberOfDaysAbroad += moment(trip.arrivalDate).utc(true).diff(moment(trip.departureDate).utc(true), 'days') + 1;
+      });
+    }
     return numberOfDaysAbroad;
   }
 }
