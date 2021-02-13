@@ -4,6 +4,9 @@ import {Moment} from 'moment';
 import {Router} from '@angular/router';
 import {Trip} from '../../../models/trip';
 import {AppDateCalculatorService} from '../../../services/app-date-calculator/app-date-calculator.service';
+import {catchError} from 'rxjs/operators';
+import {BehaviorSubject, EMPTY} from 'rxjs';
+import {TripService} from '../../../services/trip.service';
 
 @Component({
   selector: 'app-app-date-calculator',
@@ -12,18 +15,25 @@ import {AppDateCalculatorService} from '../../../services/app-date-calculator/ap
 })
 export class AppDateCalculatorComponent implements OnInit {
   private readonly landingDate: Moment;
-  private readonly trips: Trip[];
+  private trips: Trip[];
+  private trips$ = this.tripService.allTripsWithCountries$.pipe(
+    catchError(err => {
+        this.errorMessageSubject.next(err.message);
+        return EMPTY;
+      }
+    )
+  ).subscribe(trips => this.trips = trips);
+  // errors
+  errorMessageSubject = new BehaviorSubject<string>('');
+  errorMessage = this.errorMessageSubject.asObservable();
   applicationDate: Date;
 
-  constructor(private router: Router, private appDateCalculatorService: AppDateCalculatorService) {
+  constructor(private router: Router, private appDateCalculatorService: AppDateCalculatorService, private tripService: TripService) {
     if (router.getCurrentNavigation().extras.state
       && router.getCurrentNavigation().extras.state.data) {
       if (router.getCurrentNavigation().extras.state.data.landingDate) {
         // deserialization of date and getting it to UTC
         this.landingDate = moment(router.getCurrentNavigation().extras.state.data.landingDate).utc();
-      }
-      if (router.getCurrentNavigation().extras.state.data.trips) {
-        this.trips = router.getCurrentNavigation().extras.state.data.trips;
       }
     }
   }

@@ -64,8 +64,7 @@ export class TripsInfoComponent {
     this.router.navigate(['/application-date'], {
       state: {
         data: {
-          landingDate: this.landingDate.format(),
-          trips: this.trips$
+          landingDate: this.landingDate.format()
         }
       }
     });
